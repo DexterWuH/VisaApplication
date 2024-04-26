@@ -15,6 +15,7 @@ import javax.inject.Inject
 interface MainScreenViewModelContract {
     fun fetchData()
 }
+
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val countryVisaTypesRepo: CountryVisaTypesRepo,
@@ -22,24 +23,17 @@ class MainScreenViewModel @Inject constructor(
 ) : ViewModel(), MainScreenViewModelContract {
 
     private val _visaDetail = MutableStateFlow<VisaDetail?>(null)
-    val visaDetail : StateFlow<VisaDetail?> = _visaDetail
+    val visaDetail: StateFlow<VisaDetail?> = _visaDetail
     private val _countryVisaTypes = MutableStateFlow<CountryVisaTypes?>(null)
-    val countryVisaTypes : StateFlow<CountryVisaTypes?> = _countryVisaTypes
+    val countryVisaTypes: StateFlow<CountryVisaTypes?> = _countryVisaTypes
 
     override fun fetchData() {
         viewModelScope.launch {
-            try {
-                val countryVisaTypes = countryVisaTypesRepo.fetchCountryVisaTypes()
-                val visaUUID = countryVisaTypes.visaUUID
-                if (visaUUID != null){
-                    val visaDetail = visaDetailRepo.fetchVisaDetail(visaUUID)
-                    _visaDetail.value = visaDetail
-                } else{
-                    val countryVisaTypes = countryVisaTypesRepo.fetchCountryVisaTypes()
-                }
-            }
-            catch (e:Exception){
-            }
+            //      val visaUUID = countryVisaTypes.visaUUID
+            //      val visaDetail = visaDetailRepo.fetchVisaDetail(visaUUID)
+            //      _visaDetail.value = visaDetail
+            _countryVisaTypes.value = countryVisaTypesRepo.fetchCountryVisaTypes()
+
         }
     }
 }
